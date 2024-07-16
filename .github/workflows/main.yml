@@ -1,4 +1,4 @@
-name: Build Go Application
+name: Build and Package Go Application for Lambda
 
 on:
   push:
@@ -24,11 +24,20 @@ jobs:
       - name: Install dependencies
         run: go mod download
 
-      - name: Build
+      - name: Build for Linux amd64
         run: |
-          mkdir -p bin  # Create a bin directory if it doesn't exist
-          go build -v -o bin/main ./...
-        working-directory: ${{ github.workspace }}
+          mkdir -p bin
+          GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -tags lambda.norpc -o bin/main ./...
+
+      - name: Zip for Lambda deployment
+        run: |
+          zip -j bin/bootstrap.zip bin/main
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: lambda-deployment
+          path: bin/bootstrap.zip
 
       - name: Test
         run: go test -v ./...
