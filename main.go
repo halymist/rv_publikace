@@ -12,7 +12,7 @@ func main() {
 }
 
 func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	log.Println("ahoj ahoj")
+	log.Println("ahoj")
 
 	response := events.APIGatewayProxyResponse{
 		StatusCode: 200,
