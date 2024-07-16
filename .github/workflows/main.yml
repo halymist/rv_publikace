@@ -59,9 +59,6 @@ jobs:
       - name: Deploy to AWS Lambda
         run: |
           aws lambda update-function-code \
-            --function-name RV-aplikace \
+            --function-name arn:aws:lambda:eu-north-1:381492118911:function:RV-aplikace \
             --zip-file fileb://bootstrap.zip
 
-      - name: Test Lambda function (optional)
-        run: |
-          aws lambda invoke --function-name RV-aplikace output.json && cat output.json
