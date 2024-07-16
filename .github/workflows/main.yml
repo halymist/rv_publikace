@@ -3,10 +3,10 @@ name: Build Go Application
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   build:
@@ -19,13 +19,16 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: '1.21.x' 
+          go-version: '1.21.x'
 
       - name: Install dependencies
         run: go mod download
 
       - name: Build
-        run: go build -v ./...
+        run: |
+          mkdir -p bin  # Create a bin directory if it doesn't exist
+          go build -v -o bin/main ./...
+        working-directory: ${{ github.workspace }}
 
       - name: Test
         run: go test -v ./...
