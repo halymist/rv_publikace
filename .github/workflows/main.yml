@@ -34,7 +34,7 @@ jobs:
           zip -j bootstrap.zip bin/main
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: lambda-deployment
           path: bootstrap.zip
