@@ -31,13 +31,13 @@ jobs:
 
       - name: Zip for Lambda deployment
         run: |
-          zip -j bin/bootstrap.zip bin/main
+          zip -j bootstrap.zip bin/main
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: lambda-deployment
-          path: bin/bootstrap.zip
+          path: bootstrap.zip
 
       - name: Test
         run: go test -v ./...
