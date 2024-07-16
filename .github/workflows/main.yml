@@ -27,7 +27,7 @@ jobs:
       - name: Build for Linux amd64
         run: |
           mkdir -p bin
-          GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -tags lambda.norpc -o bin/main ./...
+          GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -tags lambda.norpc -o bin/bootstrap main.go
 
       - name: Zip for Lambda deployment
         run: |
