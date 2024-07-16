@@ -1,4 +1,4 @@
-name: Build and Package Go Application for Lambda
+name: Build and Deploy Go Application to Lambda
 
 on:
   push:
@@ -39,5 +39,29 @@ jobs:
           name: lambda-deployment
           path: bootstrap.zip
 
-      - name: Test
-        run: go test -v ./...
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lambda-deployment
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1  # Replace with your Lambda function's region
+
+      - name: Deploy to AWS Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name RV-aplikace \
+            --zip-file fileb://bootstrap.zip
+
+      - name: Test Lambda function (optional)
+        run: |
+          aws lambda invoke --function-name RV-aplikace output.json && cat output.json
