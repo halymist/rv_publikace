@@ -1,7 +1,10 @@
-name: Build and Package Binary
+name: Build Go Application
 
 on:
   push:
+    branches:
+      - main
+  pull_request:
     branches:
       - main
 
@@ -19,21 +22,10 @@ jobs:
           go-version: 1.x
 
       - name: Install dependencies
-        run: go get -v ./...
+        run: go mod download
 
-      - name: Build the binary
-        env:
-          GOOS: linux
-          GOARCH: amd64
-          CGO_ENABLED: 0
-        run: go build -tags lambda.norpc -o bootstrap main.go
+      - name: Build
+        run: go build -v ./...
 
-      - name: Zip the binary
-        run: zip function.zip bootstrap
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: lambda-function
-          path: function.zip
-
+      - name: Test
+        run: go test -v ./...
