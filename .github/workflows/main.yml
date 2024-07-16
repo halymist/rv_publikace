@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Build and Package Binary
 
 on:
   push:
@@ -37,25 +37,3 @@ jobs:
           name: lambda-function
           path: function.zip
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: lambda-function
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-north-1
-
-      - name: Deploy to AWS Lambda
-        run: |
-          aws lambda update-function-code \
-            --function-name RV-aplikace \
-            --zip-file fileb://function.zip
