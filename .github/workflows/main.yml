@@ -31,10 +31,11 @@ jobs:
 
       - name: Zip for Lambda deployment
         run: |
-          zip -r ../bootstrap.zip .
+          cd bin
+          zip -r ../bootstrap.zip bootstrap
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v2
         with:
           name: lambda-deployment
           path: bootstrap.zip
@@ -45,7 +46,7 @@ jobs:
 
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v2
         with:
           name: lambda-deployment
 
@@ -59,6 +60,5 @@ jobs:
       - name: Deploy to AWS Lambda
         run: |
           aws lambda update-function-code \
-            --function-name arn:aws:lambda:eu-north-1:381492118911:function:RV-aplikace \
+            --function-name RV-aplikace \
             --zip-file fileb://bootstrap.zip
-
