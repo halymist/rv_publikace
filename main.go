@@ -18,7 +18,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		StatusCode: 200,
 		Body:       "franta smrdí!",
 		Headers: map[string]string{
-			"Content-Type": "text/plain",
+			"Content-Type": "text/plain; charset=utf-8",
 		},
 	}
 
