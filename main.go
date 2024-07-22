@@ -12,35 +12,36 @@ func main() {
 	lambda.Start(router)
 }
 
-func router(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	log.Printf("Received request: Path=%s, Method=%s\n", request.Path, request.HTTPMethod)
-	switch request.Path {
+func router(request events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
+	log.Printf("Received request: Path=%s, Method=%s\n", request.RequestContext.HTTP.Path, request.RequestContext.HTTP.Method)
+
+	switch request.RequestContext.HTTP.Path {
 	case "/login":
-		if request.HTTPMethod == http.MethodPost {
-			return handleLogin()
+		if request.RequestContext.HTTP.Method == http.MethodPost {
+			return handleLogin(request)
 		}
 	case "/data":
-		if request.HTTPMethod == http.MethodGet {
-			return handleData()
+		if request.RequestContext.HTTP.Method == http.MethodGet {
+			return handleData(request)
 		}
 	default:
-		return events.APIGatewayProxyResponse{
+		return events.APIGatewayV2HTTPResponse{
 			StatusCode: 404,
 			Body:       "Path not found",
 		}, nil
 	}
-	return events.APIGatewayProxyResponse{
+	return events.APIGatewayV2HTTPResponse{
 		StatusCode: 405,
 		Body:       "Method not allowed",
 	}, nil
 }
 
-func handleLogin() (events.APIGatewayProxyResponse, error) {
+func handleLogin(request events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
 	log.Println("login")
 
-	response := events.APIGatewayProxyResponse{
+	response := events.APIGatewayV2HTTPResponse{
 		StatusCode: 200,
-		Body:       "login attemt!",
+		Body:       "login attempt!",
 		Headers: map[string]string{
 			"Content-Type": "text/plain; charset=utf-8",
 		},
@@ -49,9 +50,9 @@ func handleLogin() (events.APIGatewayProxyResponse, error) {
 	return response, nil
 }
 
-func handleData() (events.APIGatewayProxyResponse, error) {
+func handleData(request events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
 	log.Println("data")
-	response := events.APIGatewayProxyResponse{
+	response := events.APIGatewayV2HTTPResponse{
 		StatusCode: 200,
 		Body:       "Handling data",
 		Headers: map[string]string{
