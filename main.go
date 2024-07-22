@@ -13,14 +13,15 @@ func main() {
 }
 
 func router(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	log.Printf("Received request: Path=%s, Method=%s\n", request.Path, request.HTTPMethod)
 	switch request.Path {
 	case "/login":
 		if request.HTTPMethod == http.MethodPost {
-			return handleLogin(request)
+			return handleLogin()
 		}
 	case "/data":
 		if request.HTTPMethod == http.MethodGet {
-			return handleData(request)
+			return handleData()
 		}
 	default:
 		return events.APIGatewayProxyResponse{
@@ -34,7 +35,7 @@ func router(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespon
 	}, nil
 }
 
-func handleLogin(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func handleLogin() (events.APIGatewayProxyResponse, error) {
 	log.Println("login")
 
 	response := events.APIGatewayProxyResponse{
@@ -48,7 +49,7 @@ func handleLogin(request events.APIGatewayProxyRequest) (events.APIGatewayProxyR
 	return response, nil
 }
 
-func handleData(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func handleData() (events.APIGatewayProxyResponse, error) {
 	log.Println("data")
 	response := events.APIGatewayProxyResponse{
 		StatusCode: 200,
