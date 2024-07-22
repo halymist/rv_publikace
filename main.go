@@ -17,7 +17,7 @@ func router(request events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResp
 
 	switch request.RequestContext.HTTP.Path {
 	case "/login":
-		if request.RequestContext.HTTP.Method == http.MethodPost {
+		if request.RequestContext.HTTP.Method == http.MethodGet {
 			return handleLogin(request)
 		}
 	case "/data":
