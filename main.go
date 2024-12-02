@@ -21,10 +21,6 @@ func router(request events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResp
 		if request.RequestContext.HTTP.Method == http.MethodGet {
 			return handleLogin(request)
 		}
-	case "/data":
-		if request.RequestContext.HTTP.Method == http.MethodGet {
-			return handleData(request)
-		}
 	default:
 		return events.APIGatewayV2HTTPResponse{
 			StatusCode: 404,
@@ -64,16 +60,4 @@ func handleLogin(request events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTT
 			"Content-Type": "text/plain; charset=utf-8",
 		},
 	}, nil
-}
-
-func handleData(request events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
-	log.Println("data")
-	response := events.APIGatewayV2HTTPResponse{
-		StatusCode: 200,
-		Body:       "Handling data",
-		Headers: map[string]string{
-			"Content-Type": "text/plain; charset=utf-8",
-		},
-	}
-	return response, nil
 }
